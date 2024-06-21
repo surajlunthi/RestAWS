@@ -21,6 +21,7 @@ public class Job {
     private String jobId;
     private List<BucketEntity> bucketEntity = new ArrayList<>();
     private List<InstanceEntity> instanceEntity = new ArrayList<>();
+    private List<ObjectEntity> objectEntity = new ArrayList<>();
     private JobStatus status;
     private boolean isDeleted;
     private LocalDateTime createdAt;

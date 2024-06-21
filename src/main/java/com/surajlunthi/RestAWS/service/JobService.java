@@ -48,18 +48,18 @@ public class JobService {
 
             List<BucketEntity> bucketEntityList = bucketRepository.findByJobId(jobId);
             List<InstanceEntity> instanceEntityList = instanceRepository.findByJobId(jobId);
-            List<ObjectEntity> objectEntity = objectEntityRepository.findByJobId(jobId);
+            List<ObjectEntity> objectEntityList = objectEntityRepository.findByJobId(jobId);
 
             log.info("Found {} bucket entities for job {}", bucketEntityList.size(), jobId);
             log.info("Found {} instance entities for job {}", instanceEntityList.size(), jobId);
-            log.info("Found {} object entities for job {}", objectEntity.size(), jobId);
+            log.info("Found {} object entities for job {}", objectEntityList.size(), jobId);
 
             Job existingJob = jobRepository.findByJobId(jobId).orElse(new Job());
-
             existingJob.setJobId(jobId);
             existingJob.setStatus(jobStatus);
             existingJob.setBucketEntity(bucketEntityList);
             existingJob.setInstanceEntity(instanceEntityList);
+            existingJob.setObjectEntity(objectEntityList);
 
             jobRepository.save(existingJob);
             log.info("Saved job with jobId {} and updated status {}", jobId, jobStatus);

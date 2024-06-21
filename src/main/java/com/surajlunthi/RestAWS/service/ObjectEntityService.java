@@ -34,12 +34,16 @@ public class ObjectEntityService {
     public Integer findBucketCount(String bucket) {
         log.info("Fetching all objects from the bucket");
         ObjectEntity bucketEntityList = objectEntityRepository.findByBucket(bucket);
-        return bucketEntityList.getBucketData().size();
+        return bucketEntityList == null ?0:bucketEntityList.getBucketData().size();
     }
 
     public List<String> getBucketObjectLike(String bucket,String pattern){
-        List<BucketData> objectEntities =  objectEntityRepository.findByBucket(bucket).getBucketData();
         List<String> matched = new ArrayList<>();
+        if(objectEntityRepository.findByBucket(bucket) == null){
+            return matched;
+        }
+        List<BucketData> objectEntities =  objectEntityRepository.findByBucket(bucket).getBucketData();
+
         Pattern regexPattern = Pattern.compile(pattern);
         for (BucketData objectSummary : objectEntities) {
             String objectKey = objectSummary.getKey();

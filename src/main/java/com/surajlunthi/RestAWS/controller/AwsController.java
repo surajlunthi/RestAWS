@@ -54,6 +54,7 @@ public class AwsController {
                 })
                 .exceptionally(ex -> {
                     log.error("Failed to complete tasks for job {}: {}", jobId, ex.getMessage());
+                    jobService.saveJob(String.valueOf(jobId),JobStatus.FAILED);
                     return null;
                 });
 
@@ -86,12 +87,21 @@ public class AwsController {
         jobService.saveJob(jobId.toString(),JobStatus.IN_PROGRESS);
         log.info("getS3BucketObjects services for jobID : {}", jobId);
 
-        CompletableFuture<String> objectTask = awsService.discoverObjectsFromS3Buckets(jobId.toString(),bucketName)
-                .thenApplyAsync(result -> {
+        CompletableFuture<String> objectTask = awsService.discoverObjectsFromS3Buckets(jobId.toString(), bucketName)
+                .thenComposeAsync(result -> {
                     log.info("getS3BucketObjects completed for job {}", jobId);
-                    return result;
+                    return jobService.saveJob(jobId.toString(), JobStatus.SUCCESS)
+                            .thenApplyAsync(savedJobResult -> {
+                                log.info("Job saved successfully: {}", savedJobResult);
+                                return result;
+                            });
+                })
+                .exceptionally(ex -> {
+                    log.error("Failed to complete getS3BucketObjects for job {}: {}", jobId, ex.getMessage());
+                    jobService.saveJob(String.valueOf(jobId), JobStatus.FAILED);
+                    return null;
                 });
-        jobService.saveJob(jobId.toString(),JobStatus.SUCCESS);
+
         return jobId.toString();
     }
 

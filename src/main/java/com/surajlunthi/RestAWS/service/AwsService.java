@@ -123,10 +123,9 @@ public class AwsService {
             }
             log.info("save discoverObjectsFromS3Buckets for jobId :{}",jobId);
             objectEntityRepository.save(objectEntityFromS3Object(bucketData,jobId,bucketName));
-
-
         }
         catch (Exception ex){
+            jobService.saveJob(jobId,JobStatus.SUCCESS);
             log.error("Error in discoverObjectsFromS3Buckets: {}", ex.getMessage());
         }
         return CompletableFuture.completedFuture(jobId);
