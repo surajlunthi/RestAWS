@@ -28,6 +28,7 @@ public class AwsConfig {
         return executor;
     }
 
+
     @Bean
     public Ec2Client ec2Client() {
         return Ec2Client.builder()
