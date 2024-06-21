@@ -60,7 +60,7 @@ public class AwsController {
         return jobId.toString();
     }
 
-    @GetMapping("/{jobId}")
+    @GetMapping("jobStatus/{jobId}")
     public ResponseEntity<JobStatus> getJobResult(@PathVariable String jobId) {
         Job job = jobService.findByJobId(jobId);
         if (job != null) {
@@ -69,7 +69,7 @@ public class AwsController {
             return ResponseEntity.notFound().build();
         }
     }
-    @GetMapping("/service")
+    @GetMapping("discovery/services")
     public ResponseEntity<List<String>> getDiscoveryResult(String service){
         List<String> result;
         if(service.equals("EC2")){
@@ -80,7 +80,7 @@ public class AwsController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("bucket/{bucketName}")
+    @PostMapping("bucket/{bucketName}")
     public String getS3BucketObjects(@PathVariable String bucketName) {
         UUID jobId = UUID.randomUUID();
 
