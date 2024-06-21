@@ -70,13 +70,15 @@ public class AwsController {
             return ResponseEntity.notFound().build();
         }
     }
-    @GetMapping("discovery/services")
-    public ResponseEntity<List<String>> getDiscoveryResult(String service){
+    @GetMapping("/discovery/{service}")
+    public ResponseEntity<List<String>> getDiscoveryResult(@PathVariable String service) {
         List<String> result;
-        if(service.equals("EC2")){
+        if ("EC2".equals(service)) {
             result = instanceEntityService.findAllInstanceIds();
-        }else {
-           result= bucketEntityService.getBuckets();
+        } else if(service.equals("S3")) {
+            result = bucketEntityService.getBuckets();
+        }else{
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(result);
     }
@@ -110,6 +112,8 @@ public class AwsController {
         int count = objectEntityService.findBucketCount(bucket);
         return ResponseEntity.ok(count);
     }
+
+
     @GetMapping("/bucketMatching/{bucketName}")
     public ResponseEntity<List<String>> getMatchingObjects(
             @PathVariable String bucketName,

@@ -6,10 +6,13 @@
 
 ```http
   POST /services
+  
+  output 0e9e2ad6-cd91-46e7-a112-7e044a4ebe9c
 ```
 | Parameter      | Return  | Description       |
 |:---------------|:--------|:------------------|
 | `List<String>` | `jobId` | This method  asynchronously discover EC2 instances in the Mumbai Region in one thread and S3 buckets in another thread and persist the result in DB |``
+
 
 will persist this type of data in db
 
@@ -66,6 +69,7 @@ will persist this type of data in db
 
 ```http
   GET /jobStatus/{jobId}
+  output "SUCCESS"
 ```
 | Parameter | Return                                       | Description                                                          |
 |:----------|:---------------------------------------------|:---------------------------------------------------------------------|
@@ -82,6 +86,7 @@ will persist this type of data in db
 
 ```http
   POST /bucket/{bucketName}
+  output 294472b4-7a2c-47c6-be7d-18f42eaa5398
 ```
 | Parameter    | Return                                      | Description  |
 |:-------------|:--------------------------------------------|:-------------|
@@ -121,6 +126,7 @@ will persist this type of data in db
 
 ```http
   GET /bucketCount/{bucket}
+  output 6
 ```
 | Parameter     | Return             | Description                                          |
 |:--------------|:-------------------|:-----------------------------------------------------|
@@ -128,7 +134,7 @@ will persist this type of data in db
 
 
 ```http
-  GET /bucketCount/{bucket}
+  GET /bucketMatching/{bucketName}
 ```
 | Parameter                  | Return             | Description                                                        |
 |:---------------------------|:-------------------|:-------------------------------------------------------------------|
