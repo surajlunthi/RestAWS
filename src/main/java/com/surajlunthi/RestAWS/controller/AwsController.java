@@ -83,7 +83,7 @@ public class AwsController {
     @PostMapping("bucket/{bucketName}")
     public String getS3BucketObjects(@PathVariable String bucketName) {
         UUID jobId = UUID.randomUUID();
-
+        jobService.saveJob(jobId.toString(),JobStatus.IN_PROGRESS);
         log.info("getS3BucketObjects services for jobID : {}", jobId);
 
         CompletableFuture<String> objectTask = awsService.discoverObjectsFromS3Buckets(jobId.toString(),bucketName)
@@ -91,7 +91,7 @@ public class AwsController {
                     log.info("getS3BucketObjects completed for job {}", jobId);
                     return result;
                 });
-
+        jobService.saveJob(jobId.toString(),JobStatus.SUCCESS);
         return jobId.toString();
     }
 
